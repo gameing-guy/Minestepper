@@ -12,11 +12,13 @@ Symbol Table
   0 _initializeRobot                                                00000000 GR
   3 _joy                                                            00000000 GR
     _joypad                                                         ******** GX
-  0 _main                                                           000000B0 GR
+  0 _main                                                           0000003D GR
+    _minestepperField                                               ******** GX
     _minestepperTiles                                               ******** GX
-  0 _move                                                           0000003D GR
   2 _oldJoy                                                         00000008 GR
   2 _robot                                                          00000000 GR
+    _set_bkg_data                                                   ******** GX
+    _set_bkg_tiles                                                  ******** GX
     _set_sprite_data                                                ******** GX
     _shadow_OAM                                                     ******** GX
     _vsync                                                          ******** GX
@@ -27,7 +29,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      178   flags    0
+   0 _CODE                                      size      32F   flags    0
    1 _HRAM                                      size        0   flags    0
    2 _DATA                                      size        9   flags    0
    3 _INITIALIZED                               size        1   flags    0

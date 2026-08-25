@@ -8,335 +8,707 @@
                                       8 ; Public variables in this module
                                       9 ;--------------------------------------------------------
                                      10 	.globl _main
-                                     11 	.globl _move
-                                     12 	.globl _initializeRobot
-                                     13 	.globl _set_sprite_data
-                                     14 	.globl _vsync
-                                     15 	.globl _joypad
-                                     16 	.globl _joy
-                                     17 	.globl _oldJoy
-                                     18 	.globl _robot
-                                     19 ;--------------------------------------------------------
-                                     20 ; special function registers
-                                     21 ;--------------------------------------------------------
-                                     22 	.area _HRAM
-                                     23 ;--------------------------------------------------------
-                                     24 ; ram data
-                                     25 ;--------------------------------------------------------
-                                     26 	.area _DATA
-    00000000                         27 _robot::
-    00000000                         28 	.ds 8
-    00000008                         29 _oldJoy::
-    00000008                         30 	.ds 1
-                                     31 ;--------------------------------------------------------
-                                     32 ; ram data
-                                     33 ;--------------------------------------------------------
-                                     34 	.area _INITIALIZED
-    00000000                         35 _joy::
-    00000000                         36 	.ds 1
-                                     37 ;--------------------------------------------------------
-                                     38 ; absolute external ram data
-                                     39 ;--------------------------------------------------------
-                                     40 	.area _DABS (ABS)
-                                     41 ;--------------------------------------------------------
-                                     42 ; global & static initialisations
-                                     43 ;--------------------------------------------------------
-                                     44 	.area _HOME
-                                     45 	.area _GSINIT
-                                     46 	.area _GSFINAL
-                                     47 	.area _GSINIT
-                                     48 ;--------------------------------------------------------
-                                     49 ; Home
-                                     50 ;--------------------------------------------------------
-                                     51 	.area _HOME
+                                     11 	.globl _initializeRobot
+                                     12 	.globl _set_sprite_data
+                                     13 	.globl _set_bkg_tiles
+                                     14 	.globl _set_bkg_data
+                                     15 	.globl _vsync
+                                     16 	.globl _joypad
+                                     17 	.globl _joy
+                                     18 	.globl _oldJoy
+                                     19 	.globl _robot
+                                     20 ;--------------------------------------------------------
+                                     21 ; special function registers
+                                     22 ;--------------------------------------------------------
+                                     23 	.area _HRAM
+                                     24 ;--------------------------------------------------------
+                                     25 ; ram data
+                                     26 ;--------------------------------------------------------
+                                     27 	.area _DATA
+    00000000                         28 _robot::
+    00000000                         29 	.ds 8
+    00000008                         30 _oldJoy::
+    00000008                         31 	.ds 1
+                                     32 ;--------------------------------------------------------
+                                     33 ; ram data
+                                     34 ;--------------------------------------------------------
+                                     35 	.area _INITIALIZED
+    00000000                         36 _joy::
+    00000000                         37 	.ds 1
+                                     38 ;--------------------------------------------------------
+                                     39 ; absolute external ram data
+                                     40 ;--------------------------------------------------------
+                                     41 	.area _DABS (ABS)
+                                     42 ;--------------------------------------------------------
+                                     43 ; global & static initialisations
+                                     44 ;--------------------------------------------------------
+                                     45 	.area _HOME
+                                     46 	.area _GSINIT
+                                     47 	.area _GSFINAL
+                                     48 	.area _GSINIT
+                                     49 ;--------------------------------------------------------
+                                     50 ; Home
+                                     51 ;--------------------------------------------------------
                                      52 	.area _HOME
-                                     53 ;--------------------------------------------------------
-                                     54 ; code
-                                     55 ;--------------------------------------------------------
-                                     56 	.area _CODE
-                                     57 ;main.c:13: void initializeRobot(void) {
-                                     58 ;	---------------------------------
-                                     59 ; Function initializeRobot
-                                     60 ; ---------------------------------
-    00000000                         61 _initializeRobot::
-                                     62 ;main.c:14: robot.x = 80;
-    00000000 21r04r00         [12]   63 	ld	hl, #_robot + 4
-    00000003 36 50            [12]   64 	ld	(hl), #0x50
-                                     65 ;main.c:15: robot.y = 130;
-    00000005 21r05r00         [12]   66 	ld	hl, #_robot + 5
-    00000008 36 82            [12]   67 	ld	(hl), #0x82
-                                     68 ;main.c:16: robot.width = SPRSIZE;
-    0000000A 21r06r00         [12]   69 	ld	hl, #_robot + 6
-    0000000D 36 10            [12]   70 	ld	(hl), #0x10
-                                     71 ;main.c:17: robot.height = SPRSIZE;
-    0000000F 21r07r00         [12]   72 	ld	hl, #_robot + 7
-    00000012 36 10            [12]   73 	ld	(hl), #0x10
-                                     74 ;c:\gbdk\include\gb\gb.h:1887: shadow_OAM[nb].tile=tile;
-    00000014 21r02r00         [12]   75 	ld	hl, #(_shadow_OAM + 2)
-    00000017 36 00            [12]   76 	ld	(hl), #0x00
-                                     77 ;main.c:20: robot.spriteids[0] = 0;
-    00000019 21r00r00         [12]   78 	ld	hl, #_robot
-    0000001C 36 00            [12]   79 	ld	(hl), #0x00
-                                     80 ;c:\gbdk\include\gb\gb.h:1887: shadow_OAM[nb].tile=tile;
-    0000001E 21r06r00         [12]   81 	ld	hl, #(_shadow_OAM + 6)
-    00000021 36 01            [12]   82 	ld	(hl), #0x01
-                                     83 ;main.c:22: robot.spriteids[1] = 1;
-    00000023 21r01r00         [12]   84 	ld	hl, #_robot + 1
-    00000026 36 01            [12]   85 	ld	(hl), #0x01
-                                     86 ;c:\gbdk\include\gb\gb.h:1887: shadow_OAM[nb].tile=tile;
-    00000028 21r0Ar00         [12]   87 	ld	hl, #(_shadow_OAM + 10)
-    0000002B 36 02            [12]   88 	ld	(hl), #0x02
-                                     89 ;main.c:24: robot.spriteids[2] = 2;
-    0000002D 21r02r00         [12]   90 	ld	hl, #_robot + 2
-    00000030 36 02            [12]   91 	ld	(hl), #0x02
-                                     92 ;c:\gbdk\include\gb\gb.h:1887: shadow_OAM[nb].tile=tile;
-    00000032 21r0Er00         [12]   93 	ld	hl, #(_shadow_OAM + 14)
-    00000035 36 03            [12]   94 	ld	(hl), #0x03
-                                     95 ;main.c:26: robot.spriteids[3] = 3;
-    00000037 21r03r00         [12]   96 	ld	hl, #_robot + 3
-    0000003A 36 03            [12]   97 	ld	(hl), #0x03
-                                     98 ;main.c:27: }
-    0000003C C9               [16]   99 	ret
-                                    100 ;main.c:29: void move(struct Robot* robot, uint8_t x, uint8_t y) {
-                                    101 ;	---------------------------------
-                                    102 ; Function move
-                                    103 ; ---------------------------------
-    0000003D                        104 _move::
-    0000003D E8 FD            [16]  105 	add	sp, #-3
-    0000003F F8 02            [12]  106 	ldhl	sp,	#2
-    00000041 77               [ 8]  107 	ld	(hl), a
-                                    108 ;main.c:30: move_sprite(robot->spriteids[0], x, y);
-    00000042 1A               [ 8]  109 	ld	a, (de)
-    00000043 4F               [ 4]  110 	ld	c, a
-                                    111 ;c:\gbdk\include\gb\gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
-    00000044 AF               [ 4]  112 	xor	a, a
-    00000045 69               [ 4]  113 	ld	l, c
-    00000046 67               [ 4]  114 	ld	h, a
-    00000047 29               [ 8]  115 	add	hl, hl
-    00000048 29               [ 8]  116 	add	hl, hl
-    00000049 01r00r00         [12]  117 	ld	bc, #_shadow_OAM
-    0000004C 09               [ 8]  118 	add	hl, bc
-    0000004D 4D               [ 4]  119 	ld	c, l
-    0000004E 44               [ 4]  120 	ld	b, h
-                                    121 ;c:\gbdk\include\gb\gb.h:1974: itm->y=y, itm->x=x;
-    0000004F F8 05            [12]  122 	ldhl	sp,	#5
-    00000051 7E               [ 8]  123 	ld	a, (hl)
-    00000052 02               [ 8]  124 	ld	(bc), a
-    00000053 03               [ 8]  125 	inc	bc
-    00000054 F8 02            [12]  126 	ldhl	sp,	#2
-    00000056 7E               [ 8]  127 	ld	a, (hl)
-    00000057 02               [ 8]  128 	ld	(bc), a
-                                    129 ;main.c:31: move_sprite(robot->spriteids[1], x, y + PIECESIZE);
-    00000058 F8 05            [12]  130 	ldhl	sp,	#5
-    0000005A 7E               [ 8]  131 	ld	a, (hl)
-    0000005B C6 08            [ 8]  132 	add	a, #0x08
-    0000005D F8 00            [12]  133 	ldhl	sp,	#0
-    0000005F 77               [ 8]  134 	ld	(hl), a
-    00000060 2A               [ 8]  135 	ld	a, (hl+)
-    00000061 77               [ 8]  136 	ld	(hl), a
-    00000062 6B               [ 4]  137 	ld	l, e
-    00000063 62               [ 4]  138 	ld	h, d
-    00000064 23               [ 8]  139 	inc	hl
-    00000065 4E               [ 8]  140 	ld	c, (hl)
-                                    141 ;c:\gbdk\include\gb\gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
-    00000066 AF               [ 4]  142 	xor	a, a
-    00000067 69               [ 4]  143 	ld	l, c
-    00000068 67               [ 4]  144 	ld	h, a
-    00000069 29               [ 8]  145 	add	hl, hl
-    0000006A 29               [ 8]  146 	add	hl, hl
-    0000006B 01r00r00         [12]  147 	ld	bc, #_shadow_OAM
-    0000006E 09               [ 8]  148 	add	hl, bc
-    0000006F 4D               [ 4]  149 	ld	c, l
-    00000070 44               [ 4]  150 	ld	b, h
-                                    151 ;c:\gbdk\include\gb\gb.h:1974: itm->y=y, itm->x=x;
-    00000071 F8 01            [12]  152 	ldhl	sp,	#1
-    00000073 2A               [ 8]  153 	ld	a, (hl+)
-    00000074 02               [ 8]  154 	ld	(bc), a
-    00000075 03               [ 8]  155 	inc	bc
-    00000076 7E               [ 8]  156 	ld	a, (hl)
-    00000077 02               [ 8]  157 	ld	(bc), a
-                                    158 ;main.c:32: move_sprite(robot->spriteids[2], x + PIECESIZE, y);
-    00000078 3A               [ 8]  159 	ld	a, (hl-)
-    00000079 C6 08            [ 8]  160 	add	a, #0x08
-    0000007B 77               [ 8]  161 	ld	(hl), a
-    0000007C 4E               [ 8]  162 	ld	c, (hl)
-    0000007D 6B               [ 4]  163 	ld	l, e
-    0000007E 62               [ 4]  164 	ld	h, d
-    0000007F 23               [ 8]  165 	inc	hl
-    00000080 23               [ 8]  166 	inc	hl
-    00000081 46               [ 8]  167 	ld	b, (hl)
-                                    168 ;c:\gbdk\include\gb\gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
-    00000082 AF               [ 4]  169 	xor	a, a
-    00000083 68               [ 4]  170 	ld	l, b
-    00000084 67               [ 4]  171 	ld	h, a
-    00000085 29               [ 8]  172 	add	hl, hl
-    00000086 29               [ 8]  173 	add	hl, hl
-    00000087 D5               [16]  174 	push	de
-    00000088 11r00r00         [12]  175 	ld	de, #_shadow_OAM
-    0000008B 19               [ 8]  176 	add	hl, de
-    0000008C D1               [12]  177 	pop	de
-                                    178 ;c:\gbdk\include\gb\gb.h:1974: itm->y=y, itm->x=x;
-    0000008D E5               [16]  179 	push	hl
-    0000008E F8 07            [12]  180 	ldhl	sp,	#7
-    00000090 7E               [ 8]  181 	ld	a, (hl)
-    00000091 E1               [12]  182 	pop	hl
-    00000092 22               [ 8]  183 	ld	(hl+), a
-    00000093 71               [ 8]  184 	ld	(hl), c
-                                    185 ;main.c:33: move_sprite(robot->spriteids[3], x + PIECESIZE, y + PIECESIZE);
-    00000094 13               [ 8]  186 	inc	de
-    00000095 13               [ 8]  187 	inc	de
-    00000096 13               [ 8]  188 	inc	de
-    00000097 1A               [ 8]  189 	ld	a, (de)
-    00000098 5F               [ 4]  190 	ld	e, a
-                                    191 ;c:\gbdk\include\gb\gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
-    00000099 01r00r00         [12]  192 	ld	bc, #_shadow_OAM+0
-    0000009C 6B               [ 4]  193 	ld	l, e
-    0000009D 26 00            [ 8]  194 	ld	h, #0x00
-    0000009F 29               [ 8]  195 	add	hl, hl
-    000000A0 29               [ 8]  196 	add	hl, hl
-    000000A1 09               [ 8]  197 	add	hl, bc
-    000000A2 4D               [ 4]  198 	ld	c, l
-    000000A3 44               [ 4]  199 	ld	b, h
-                                    200 ;c:\gbdk\include\gb\gb.h:1974: itm->y=y, itm->x=x;
-    000000A4 F8 00            [12]  201 	ldhl	sp,	#0
-    000000A6 2A               [ 8]  202 	ld	a, (hl+)
-    000000A7 02               [ 8]  203 	ld	(bc), a
-    000000A8 03               [ 8]  204 	inc	bc
-    000000A9 7E               [ 8]  205 	ld	a, (hl)
-    000000AA 02               [ 8]  206 	ld	(bc), a
-                                    207 ;main.c:33: move_sprite(robot->spriteids[3], x + PIECESIZE, y + PIECESIZE);
-                                    208 ;main.c:34: }
-    000000AB E8 03            [16]  209 	add	sp, #3
-    000000AD E1               [12]  210 	pop	hl
-    000000AE 33               [ 8]  211 	inc	sp
-    000000AF E9               [ 4]  212 	jp	(hl)
-                                    213 ;main.c:44: void main(void)
-                                    214 ;	---------------------------------
-                                    215 ; Function main
-                                    216 ; ---------------------------------
-    000000B0                        217 _main::
-                                    218 ;main.c:47: set_sprite_data(0, 16, minestepperTiles);
-    000000B0 11r00r00         [12]  219 	ld	de, #_minestepperTiles
-    000000B3 D5               [16]  220 	push	de
-    000000B4 21 00 10         [12]  221 	ld	hl, #0x1000
-    000000B7 E5               [16]  222 	push	hl
-    000000B8 CDr00r00         [24]  223 	call	_set_sprite_data
-    000000BB E8 04            [16]  224 	add	sp, #4
-                                    225 ;main.c:48: initializeRobot();
-    000000BD CDr00r00         [24]  226 	call	_initializeRobot
-                                    227 ;main.c:50: SHOW_SPRITES;
-    000000C0 F0r00            [12]  228 	ldh	a, (_LCDC_REG + 0)
-    000000C2 F6 02            [ 8]  229 	or	a, #0x02
-    000000C4 E0r00            [12]  230 	ldh	(_LCDC_REG + 0), a
-                                    231 ;main.c:51: DISPLAY_ON;
-    000000C6 F0r00            [12]  232 	ldh	a, (_LCDC_REG + 0)
-    000000C8 F6 80            [ 8]  233 	or	a, #0x80
-    000000CA E0r00            [12]  234 	ldh	(_LCDC_REG + 0), a
-                                    235 ;main.c:53: move(&robot, robot.x, robot.y);
-    000000CC 21r05r00         [12]  236 	ld	hl, #(_robot + 5)
-    000000CF 46               [ 8]  237 	ld	b, (hl)
-    000000D0 FAr04r00         [16]  238 	ld	a, (#(_robot + 4) + 0)
-    000000D3 C5               [16]  239 	push	bc
-    000000D4 33               [ 8]  240 	inc	sp
-    000000D5 11r00r00         [12]  241 	ld	de, #_robot
-    000000D8 CDr3Dr00         [24]  242 	call	_move
-                                    243 ;main.c:56: while(1) {
-    000000DB                        244 00110$:
-                                    245 ;main.c:37: oldJoy = joy, joy = joypad();
-    000000DB FAr00r00         [16]  246 	ld	a, (#_joy)
-    000000DE EAr08r00         [16]  247 	ld	(#_oldJoy),a
-    000000E1 CDr00r00         [24]  248 	call	_joypad
-    000000E4 EAr00r00         [16]  249 	ld	(#_joy),a
-                                    250 ;main.c:41: return ((joy & ~oldJoy) & key);
-    000000E7 FAr08r00         [16]  251 	ld	a, (#_oldJoy)
-    000000EA 2F               [ 4]  252 	cpl
-    000000EB 21r00r00         [12]  253 	ld	hl, #_joy
-    000000EE A6               [ 8]  254 	and	a, (hl)
-    000000EF CB 4F            [ 8]  255 	bit	1, a
-    000000F1 28 17            [12]  256 	jr	Z, 00102$
-                                    257 ;main.c:59: if (keyPressed(J_LEFT)) {
-                                    258 ;main.c:60: robot.x -= SPRSIZE;
-    000000F3 FAr04r00         [16]  259 	ld	a, (#(_robot + 4) + 0)
-    000000F6 C6 F0            [ 8]  260 	add	a, #0xf0
-    000000F8 EAr04r00         [16]  261 	ld	(#(_robot + 4)),a
-                                    262 ;main.c:61: move(&robot, robot.x, robot.y);
-    000000FB 21r05r00         [12]  263 	ld	hl, #(_robot + 5)
-    000000FE 46               [ 8]  264 	ld	b, (hl)
-    000000FF FAr04r00         [16]  265 	ld	a, (#(_robot + 4) + 0)
-    00000102 C5               [16]  266 	push	bc
-    00000103 33               [ 8]  267 	inc	sp
-    00000104 11r00r00         [12]  268 	ld	de, #_robot
-    00000107 CDr3Dr00         [24]  269 	call	_move
-    0000010A                        270 00102$:
-                                    271 ;main.c:41: return ((joy & ~oldJoy) & key);
-    0000010A FAr08r00         [16]  272 	ld	a, (#_oldJoy)
-    0000010D 2F               [ 4]  273 	cpl
-    0000010E 21r00r00         [12]  274 	ld	hl, #_joy
-    00000111 A6               [ 8]  275 	and	a, (hl)
-    00000112 0F               [ 4]  276 	rrca
-    00000113 30 17            [12]  277 	jr	NC, 00104$
-                                    278 ;main.c:64: if (keyPressed(J_RIGHT)) {
-                                    279 ;main.c:65: robot.x += SPRSIZE;
-    00000115 FAr04r00         [16]  280 	ld	a, (#(_robot + 4) + 0)
-    00000118 C6 10            [ 8]  281 	add	a, #0x10
-    0000011A EAr04r00         [16]  282 	ld	(#(_robot + 4)),a
-                                    283 ;main.c:66: move(&robot, robot.x, robot.y);
-    0000011D 21r05r00         [12]  284 	ld	hl, #(_robot + 5)
-    00000120 46               [ 8]  285 	ld	b, (hl)
-    00000121 FAr04r00         [16]  286 	ld	a, (#(_robot + 4) + 0)
-    00000124 C5               [16]  287 	push	bc
-    00000125 33               [ 8]  288 	inc	sp
-    00000126 11r00r00         [12]  289 	ld	de, #_robot
-    00000129 CDr3Dr00         [24]  290 	call	_move
-    0000012C                        291 00104$:
-                                    292 ;main.c:41: return ((joy & ~oldJoy) & key);
-    0000012C FAr08r00         [16]  293 	ld	a, (#_oldJoy)
-    0000012F 2F               [ 4]  294 	cpl
-    00000130 21r00r00         [12]  295 	ld	hl, #_joy
-    00000133 A6               [ 8]  296 	and	a, (hl)
-    00000134 CB 57            [ 8]  297 	bit	2, a
-    00000136 28 17            [12]  298 	jr	Z, 00106$
-                                    299 ;main.c:69: if (keyPressed(J_UP)) {
-                                    300 ;main.c:70: robot.y -= SPRSIZE;
-    00000138 FAr05r00         [16]  301 	ld	a, (#(_robot + 5) + 0)
-    0000013B C6 F0            [ 8]  302 	add	a, #0xf0
-    0000013D EAr05r00         [16]  303 	ld	(#(_robot + 5)),a
-                                    304 ;main.c:71: move(&robot, robot.x, robot.y);
-    00000140 21r05r00         [12]  305 	ld	hl, #(_robot + 5)
-    00000143 46               [ 8]  306 	ld	b, (hl)
-    00000144 FAr04r00         [16]  307 	ld	a, (#(_robot + 4) + 0)
-    00000147 C5               [16]  308 	push	bc
-    00000148 33               [ 8]  309 	inc	sp
-    00000149 11r00r00         [12]  310 	ld	de, #_robot
-    0000014C CDr3Dr00         [24]  311 	call	_move
-    0000014F                        312 00106$:
-                                    313 ;main.c:41: return ((joy & ~oldJoy) & key);
-    0000014F FAr08r00         [16]  314 	ld	a, (#_oldJoy)
-    00000152 2F               [ 4]  315 	cpl
-    00000153 21r00r00         [12]  316 	ld	hl, #_joy
-    00000156 A6               [ 8]  317 	and	a, (hl)
-    00000157 CB 5F            [ 8]  318 	bit	3, a
-    00000159 28 17            [12]  319 	jr	Z, 00108$
-                                    320 ;main.c:74: if (keyPressed(J_DOWN)) {
-                                    321 ;main.c:75: robot.y += SPRSIZE;
-    0000015B FAr05r00         [16]  322 	ld	a, (#(_robot + 5) + 0)
-    0000015E C6 10            [ 8]  323 	add	a, #0x10
-    00000160 EAr05r00         [16]  324 	ld	(#(_robot + 5)),a
-                                    325 ;main.c:76: move(&robot, robot.x, robot.y);
-    00000163 21r05r00         [12]  326 	ld	hl, #(_robot + 5)
-    00000166 46               [ 8]  327 	ld	b, (hl)
-    00000167 FAr04r00         [16]  328 	ld	a, (#(_robot + 4) + 0)
-    0000016A C5               [16]  329 	push	bc
-    0000016B 33               [ 8]  330 	inc	sp
-    0000016C 11r00r00         [12]  331 	ld	de, #_robot
-    0000016F CDr3Dr00         [24]  332 	call	_move
-    00000172                        333 00108$:
-                                    334 ;main.c:81: vsync();
-    00000172 CDr00r00         [24]  335 	call	_vsync
-                                    336 ;main.c:83: }
-    00000175 C3rDBr00         [16]  337 	jp	00110$
-                                    338 	.area _CODE
-                                    339 	.area _INITIALIZER
-    00000000                        340 __xinit__joy:
-    00000000 00                     341 	.db #0x00	; 0
-                                    342 	.area _CABS (ABS)
+                                     53 	.area _HOME
+                                     54 ;--------------------------------------------------------
+                                     55 ; code
+                                     56 ;--------------------------------------------------------
+                                     57 	.area _CODE
+                                     58 ;main.c:28: void initializeRobot(void) {
+                                     59 ;	---------------------------------
+                                     60 ; Function initializeRobot
+                                     61 ; ---------------------------------
+    00000000                         62 _initializeRobot::
+                                     63 ;main.c:29: robot.x = 0;
+    00000000 21r04r00         [12]   64 	ld	hl, #_robot + 4
+    00000003 36 00            [12]   65 	ld	(hl), #0x00
+                                     66 ;main.c:30: robot.y = 0;
+    00000005 21r05r00         [12]   67 	ld	hl, #_robot + 5
+    00000008 36 00            [12]   68 	ld	(hl), #0x00
+                                     69 ;main.c:31: robot.width = SPRSIZE;
+    0000000A 21r06r00         [12]   70 	ld	hl, #_robot + 6
+    0000000D 36 10            [12]   71 	ld	(hl), #0x10
+                                     72 ;main.c:32: robot.height = SPRSIZE;
+    0000000F 21r07r00         [12]   73 	ld	hl, #_robot + 7
+    00000012 36 10            [12]   74 	ld	(hl), #0x10
+                                     75 ;c:\gbdk\include\gb\gb.h:1887: shadow_OAM[nb].tile=tile;
+    00000014 21r02r00         [12]   76 	ld	hl, #(_shadow_OAM + 2)
+    00000017 36 00            [12]   77 	ld	(hl), #0x00
+                                     78 ;main.c:35: robot.spriteids[0] = 0;
+    00000019 21r00r00         [12]   79 	ld	hl, #_robot
+    0000001C 36 00            [12]   80 	ld	(hl), #0x00
+                                     81 ;c:\gbdk\include\gb\gb.h:1887: shadow_OAM[nb].tile=tile;
+    0000001E 21r06r00         [12]   82 	ld	hl, #(_shadow_OAM + 6)
+    00000021 36 01            [12]   83 	ld	(hl), #0x01
+                                     84 ;main.c:37: robot.spriteids[1] = 1;
+    00000023 21r01r00         [12]   85 	ld	hl, #_robot + 1
+    00000026 36 01            [12]   86 	ld	(hl), #0x01
+                                     87 ;c:\gbdk\include\gb\gb.h:1887: shadow_OAM[nb].tile=tile;
+    00000028 21r0Ar00         [12]   88 	ld	hl, #(_shadow_OAM + 10)
+    0000002B 36 02            [12]   89 	ld	(hl), #0x02
+                                     90 ;main.c:39: robot.spriteids[2] = 2;
+    0000002D 21r02r00         [12]   91 	ld	hl, #_robot + 2
+    00000030 36 02            [12]   92 	ld	(hl), #0x02
+                                     93 ;c:\gbdk\include\gb\gb.h:1887: shadow_OAM[nb].tile=tile;
+    00000032 21r0Er00         [12]   94 	ld	hl, #(_shadow_OAM + 14)
+    00000035 36 03            [12]   95 	ld	(hl), #0x03
+                                     96 ;main.c:41: robot.spriteids[3] = 3;
+    00000037 21r03r00         [12]   97 	ld	hl, #_robot + 3
+    0000003A 36 03            [12]   98 	ld	(hl), #0x03
+                                     99 ;main.c:42: }
+    0000003C C9               [16]  100 	ret
+                                    101 ;main.c:52: void main(void)
+                                    102 ;	---------------------------------
+                                    103 ; Function main
+                                    104 ; ---------------------------------
+    0000003D                        105 _main::
+    0000003D E8 FD            [16]  106 	add	sp, #-3
+                                    107 ;main.c:55: set_sprite_data(0, 17, minestepperTiles);
+    0000003F 01r00r00         [12]  108 	ld	bc, #_minestepperTiles+0
+    00000042 C5               [16]  109 	push	bc
+    00000043 21 00 11         [12]  110 	ld	hl, #0x1100
+    00000046 E5               [16]  111 	push	hl
+    00000047 CDr00r00         [24]  112 	call	_set_sprite_data
+    0000004A E8 04            [16]  113 	add	sp, #4
+                                    114 ;main.c:56: set_bkg_data(0, 17, minestepperTiles);
+    0000004C C5               [16]  115 	push	bc
+    0000004D 21 00 11         [12]  116 	ld	hl, #0x1100
+    00000050 E5               [16]  117 	push	hl
+    00000051 CDr00r00         [24]  118 	call	_set_bkg_data
+    00000054 E8 04            [16]  119 	add	sp, #4
+                                    120 ;main.c:58: set_bkg_tiles(0, 0, DEVICE_SCREEN_WIDTH, DEVICE_SCREEN_HEIGHT, minestepperField);
+    00000056 11r00r00         [12]  121 	ld	de, #_minestepperField
+    00000059 D5               [16]  122 	push	de
+    0000005A 21 14 12         [12]  123 	ld	hl, #0x1214
+    0000005D E5               [16]  124 	push	hl
+    0000005E AF               [ 4]  125 	xor	a, a
+    0000005F 0F               [ 4]  126 	rrca
+    00000060 F5               [16]  127 	push	af
+    00000061 CDr00r00         [24]  128 	call	_set_bkg_tiles
+    00000064 E8 06            [16]  129 	add	sp, #6
+                                    130 ;main.c:59: initializeRobot();
+    00000066 CDr00r00         [24]  131 	call	_initializeRobot
+                                    132 ;main.c:61: SHOW_BKG;
+    00000069 F0r00            [12]  133 	ldh	a, (_LCDC_REG + 0)
+    0000006B F6 01            [ 8]  134 	or	a, #0x01
+    0000006D E0r00            [12]  135 	ldh	(_LCDC_REG + 0), a
+                                    136 ;main.c:62: SHOW_SPRITES;
+    0000006F F0r00            [12]  137 	ldh	a, (_LCDC_REG + 0)
+    00000071 F6 02            [ 8]  138 	or	a, #0x02
+    00000073 E0r00            [12]  139 	ldh	(_LCDC_REG + 0), a
+                                    140 ;main.c:63: DISPLAY_ON;
+    00000075 F0r00            [12]  141 	ldh	a, (_LCDC_REG + 0)
+    00000077 F6 80            [ 8]  142 	or	a, #0x80
+    00000079 E0r00            [12]  143 	ldh	(_LCDC_REG + 0), a
+                                    144 ;main.c:65: move(&robot, robot.x, robot.y);
+    0000007B 21r05r00         [12]  145 	ld	hl, #(_robot + 5)
+    0000007E 46               [ 8]  146 	ld	b, (hl)
+    0000007F FAr04r00         [16]  147 	ld	a, (#(_robot + 4) + 0)
+                                    148 ;main.c:20: uint8_t tempX = calcPos(x);
+    00000082 CB 37            [ 8]  149 	swap	a
+    00000084 E6 F0            [ 8]  150 	and	a, #0xf0
+    00000086 C6 18            [ 8]  151 	add	a, #0x18
+    00000088 4F               [ 4]  152 	ld	c, a
+                                    153 ;main.c:21: uint8_t tempY = calcPos(y);
+    00000089 78               [ 4]  154 	ld	a, b
+    0000008A CB 37            [ 8]  155 	swap	a
+    0000008C E6 F0            [ 8]  156 	and	a, #0xf0
+    0000008E C6 18            [ 8]  157 	add	a, #0x18
+    00000090 F8 00            [12]  158 	ldhl	sp,	#0
+    00000092 77               [ 8]  159 	ld	(hl), a
+                                    160 ;main.c:22: move_sprite(robot->spriteids[0], tempX, tempY);
+    00000093 21r00r00         [12]  161 	ld	hl, #_robot
+                                    162 ;c:\gbdk\include\gb\gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    00000096 6E               [ 8]  163 	ld	l, (hl)
+    00000097 11r00r00         [12]  164 	ld	de, #_shadow_OAM+0
+    0000009A 26 00            [ 8]  165 	ld	h, #0x00
+    0000009C 29               [ 8]  166 	add	hl, hl
+    0000009D 29               [ 8]  167 	add	hl, hl
+    0000009E 19               [ 8]  168 	add	hl, de
+                                    169 ;c:\gbdk\include\gb\gb.h:1974: itm->y=y, itm->x=x;
+    0000009F E5               [16]  170 	push	hl
+    000000A0 F8 02            [12]  171 	ldhl	sp,	#2
+    000000A2 7E               [ 8]  172 	ld	a, (hl)
+    000000A3 E1               [12]  173 	pop	hl
+    000000A4 22               [ 8]  174 	ld	(hl+), a
+    000000A5 71               [ 8]  175 	ld	(hl), c
+                                    176 ;main.c:23: move_sprite(robot->spriteids[1], tempX, tempY + PIECESIZE);
+    000000A6 F8 00            [12]  177 	ldhl	sp,	#0
+    000000A8 2A               [ 8]  178 	ld	a, (hl+)
+    000000A9 C6 08            [ 8]  179 	add	a, #0x08
+    000000AB 77               [ 8]  180 	ld	(hl), a
+    000000AC 2A               [ 8]  181 	ld	a, (hl+)
+    000000AD 77               [ 8]  182 	ld	(hl), a
+    000000AE 21r01r00         [12]  183 	ld	hl, #_robot + 1
+    000000B1 5E               [ 8]  184 	ld	e, (hl)
+                                    185 ;c:\gbdk\include\gb\gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    000000B2 AF               [ 4]  186 	xor	a, a
+    000000B3 6B               [ 4]  187 	ld	l, e
+    000000B4 67               [ 4]  188 	ld	h, a
+    000000B5 29               [ 8]  189 	add	hl, hl
+    000000B6 29               [ 8]  190 	add	hl, hl
+    000000B7 11r00r00         [12]  191 	ld	de, #_shadow_OAM
+    000000BA 19               [ 8]  192 	add	hl, de
+                                    193 ;c:\gbdk\include\gb\gb.h:1974: itm->y=y, itm->x=x;
+    000000BB E5               [16]  194 	push	hl
+    000000BC F8 04            [12]  195 	ldhl	sp,	#4
+    000000BE 7E               [ 8]  196 	ld	a, (hl)
+    000000BF E1               [12]  197 	pop	hl
+    000000C0 22               [ 8]  198 	ld	(hl+), a
+    000000C1 71               [ 8]  199 	ld	(hl), c
+                                    200 ;main.c:24: move_sprite(robot->spriteids[2], tempX + PIECESIZE, tempY);
+    000000C2 79               [ 4]  201 	ld	a, c
+    000000C3 C6 08            [ 8]  202 	add	a, #0x08
+    000000C5 4F               [ 4]  203 	ld	c, a
+    000000C6 F8 02            [12]  204 	ldhl	sp,	#2
+    000000C8 71               [ 8]  205 	ld	(hl), c
+    000000C9 21r02r00         [12]  206 	ld	hl, #_robot + 2
+    000000CC 5E               [ 8]  207 	ld	e, (hl)
+                                    208 ;c:\gbdk\include\gb\gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    000000CD AF               [ 4]  209 	xor	a, a
+    000000CE 6B               [ 4]  210 	ld	l, e
+    000000CF 67               [ 4]  211 	ld	h, a
+    000000D0 29               [ 8]  212 	add	hl, hl
+    000000D1 29               [ 8]  213 	add	hl, hl
+    000000D2 11r00r00         [12]  214 	ld	de, #_shadow_OAM
+    000000D5 19               [ 8]  215 	add	hl, de
+    000000D6 5D               [ 4]  216 	ld	e, l
+    000000D7 54               [ 4]  217 	ld	d, h
+                                    218 ;c:\gbdk\include\gb\gb.h:1974: itm->y=y, itm->x=x;
+    000000D8 F8 00            [12]  219 	ldhl	sp,	#0
+    000000DA 2A               [ 8]  220 	ld	a, (hl+)
+    000000DB 23               [ 8]  221 	inc	hl
+    000000DC 12               [ 8]  222 	ld	(de), a
+    000000DD 13               [ 8]  223 	inc	de
+    000000DE 7E               [ 8]  224 	ld	a, (hl)
+    000000DF 12               [ 8]  225 	ld	(de), a
+                                    226 ;main.c:25: move_sprite(robot->spriteids[3], tempX + PIECESIZE, tempY + PIECESIZE);
+    000000E0 21r03r00         [12]  227 	ld	hl, #_robot + 3
+                                    228 ;c:\gbdk\include\gb\gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    000000E3 6E               [ 8]  229 	ld	l, (hl)
+    000000E4 11r00r00         [12]  230 	ld	de, #_shadow_OAM+0
+    000000E7 26 00            [ 8]  231 	ld	h, #0x00
+    000000E9 29               [ 8]  232 	add	hl, hl
+    000000EA 29               [ 8]  233 	add	hl, hl
+    000000EB 19               [ 8]  234 	add	hl, de
+                                    235 ;c:\gbdk\include\gb\gb.h:1974: itm->y=y, itm->x=x;
+    000000EC E5               [16]  236 	push	hl
+    000000ED F8 03            [12]  237 	ldhl	sp,	#3
+    000000EF 7E               [ 8]  238 	ld	a, (hl)
+    000000F0 E1               [12]  239 	pop	hl
+    000000F1 22               [ 8]  240 	ld	(hl+), a
+    000000F2 71               [ 8]  241 	ld	(hl), c
+                                    242 ;main.c:68: while(1) {
+    000000F3                        243 00118$:
+                                    244 ;main.c:45: oldJoy = joy, joy = joypad();
+    000000F3 FAr00r00         [16]  245 	ld	a, (#_joy)
+    000000F6 EAr08r00         [16]  246 	ld	(#_oldJoy),a
+    000000F9 CDr00r00         [24]  247 	call	_joypad
+    000000FC EAr00r00         [16]  248 	ld	(#_joy),a
+                                    249 ;main.c:49: return ((joy & ~oldJoy) & key);
+    000000FF FAr08r00         [16]  250 	ld	a, (#_oldJoy)
+    00000102 2F               [ 4]  251 	cpl
+    00000103 21r00r00         [12]  252 	ld	hl, #_joy
+    00000106 A6               [ 8]  253 	and	a, (hl)
+    00000107 CB 4F            [ 8]  254 	bit	1, a
+    00000109 28 77            [12]  255 	jr	Z, 00104$
+                                    256 ;main.c:71: if (keyPressed(J_LEFT)) {
+                                    257 ;main.c:72: if (robot.x != 0) robot.x--;
+    0000010B FAr04r00         [16]  258 	ld	a, (#(_robot + 4) + 0)
+    0000010E B7               [ 4]  259 	or	a, a
+    0000010F 28 04            [12]  260 	jr	Z, 00102$
+    00000111 3D               [ 4]  261 	dec	a
+    00000112 EAr04r00         [16]  262 	ld	(#(_robot + 4)),a
+    00000115                        263 00102$:
+                                    264 ;main.c:73: move(&robot, robot.x, robot.y);
+    00000115 21r05r00         [12]  265 	ld	hl, #(_robot + 5)
+    00000118 46               [ 8]  266 	ld	b, (hl)
+    00000119 FAr04r00         [16]  267 	ld	a, (#(_robot + 4) + 0)
+    0000011C 21r00r00         [12]  268 	ld	hl, #_robot
+                                    269 ;main.c:20: uint8_t tempX = calcPos(x);
+    0000011F CB 37            [ 8]  270 	swap	a
+    00000121 E6 F0            [ 8]  271 	and	a, #0xf0
+    00000123 C6 18            [ 8]  272 	add	a, #0x18
+    00000125 4F               [ 4]  273 	ld	c, a
+                                    274 ;main.c:21: uint8_t tempY = calcPos(y);
+    00000126 78               [ 4]  275 	ld	a, b
+    00000127 CB 37            [ 8]  276 	swap	a
+    00000129 E6 F0            [ 8]  277 	and	a, #0xf0
+    0000012B C6 18            [ 8]  278 	add	a, #0x18
+    0000012D 47               [ 4]  279 	ld	b, a
+                                    280 ;main.c:22: move_sprite(robot->spriteids[0], tempX, tempY);
+                                    281 ;c:\gbdk\include\gb\gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    0000012E 6E               [ 8]  282 	ld	l, (hl)
+    0000012F 26 00            [ 8]  283 	ld	h, #0x00
+    00000131 29               [ 8]  284 	add	hl, hl
+    00000132 29               [ 8]  285 	add	hl, hl
+    00000133 11r00r00         [12]  286 	ld	de, #_shadow_OAM
+    00000136 19               [ 8]  287 	add	hl, de
+                                    288 ;c:\gbdk\include\gb\gb.h:1974: itm->y=y, itm->x=x;
+    00000137 78               [ 4]  289 	ld	a, b
+    00000138 22               [ 8]  290 	ld	(hl+), a
+    00000139 71               [ 8]  291 	ld	(hl), c
+                                    292 ;main.c:23: move_sprite(robot->spriteids[1], tempX, tempY + PIECESIZE);
+    0000013A 78               [ 4]  293 	ld	a, b
+    0000013B C6 08            [ 8]  294 	add	a, #0x08
+    0000013D F8 01            [12]  295 	ldhl	sp,	#1
+    0000013F 77               [ 8]  296 	ld	(hl), a
+    00000140 2A               [ 8]  297 	ld	a, (hl+)
+    00000141 77               [ 8]  298 	ld	(hl), a
+    00000142 21r01r00         [12]  299 	ld	hl, #_robot + 1
+    00000145 5E               [ 8]  300 	ld	e, (hl)
+                                    301 ;c:\gbdk\include\gb\gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    00000146 AF               [ 4]  302 	xor	a, a
+    00000147 6B               [ 4]  303 	ld	l, e
+    00000148 67               [ 4]  304 	ld	h, a
+    00000149 29               [ 8]  305 	add	hl, hl
+    0000014A 29               [ 8]  306 	add	hl, hl
+    0000014B 11r00r00         [12]  307 	ld	de, #_shadow_OAM
+    0000014E 19               [ 8]  308 	add	hl, de
+    0000014F 5D               [ 4]  309 	ld	e, l
+    00000150 54               [ 4]  310 	ld	d, h
+                                    311 ;c:\gbdk\include\gb\gb.h:1974: itm->y=y, itm->x=x;
+    00000151 F8 02            [12]  312 	ldhl	sp,	#2
+    00000153 7E               [ 8]  313 	ld	a, (hl)
+    00000154 12               [ 8]  314 	ld	(de), a
+    00000155 13               [ 8]  315 	inc	de
+    00000156 79               [ 4]  316 	ld	a, c
+    00000157 12               [ 8]  317 	ld	(de), a
+                                    318 ;main.c:24: move_sprite(robot->spriteids[2], tempX + PIECESIZE, tempY);
+    00000158 79               [ 4]  319 	ld	a, c
+    00000159 C6 08            [ 8]  320 	add	a, #0x08
+    0000015B 77               [ 8]  321 	ld	(hl), a
+    0000015C 4E               [ 8]  322 	ld	c, (hl)
+    0000015D 21r02r00         [12]  323 	ld	hl, #_robot + 2
+    00000160 5E               [ 8]  324 	ld	e, (hl)
+                                    325 ;c:\gbdk\include\gb\gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    00000161 AF               [ 4]  326 	xor	a, a
+    00000162 6B               [ 4]  327 	ld	l, e
+    00000163 67               [ 4]  328 	ld	h, a
+    00000164 29               [ 8]  329 	add	hl, hl
+    00000165 29               [ 8]  330 	add	hl, hl
+    00000166 11r00r00         [12]  331 	ld	de, #_shadow_OAM
+    00000169 19               [ 8]  332 	add	hl, de
+                                    333 ;c:\gbdk\include\gb\gb.h:1974: itm->y=y, itm->x=x;
+    0000016A 78               [ 4]  334 	ld	a, b
+    0000016B 22               [ 8]  335 	ld	(hl+), a
+    0000016C 71               [ 8]  336 	ld	(hl), c
+                                    337 ;main.c:25: move_sprite(robot->spriteids[3], tempX + PIECESIZE, tempY + PIECESIZE);
+    0000016D 21r03r00         [12]  338 	ld	hl, #_robot + 3
+                                    339 ;c:\gbdk\include\gb\gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    00000170 6E               [ 8]  340 	ld	l, (hl)
+    00000171 01r00r00         [12]  341 	ld	bc, #_shadow_OAM+0
+    00000174 26 00            [ 8]  342 	ld	h, #0x00
+    00000176 29               [ 8]  343 	add	hl, hl
+    00000177 29               [ 8]  344 	add	hl, hl
+    00000178 09               [ 8]  345 	add	hl, bc
+    00000179 4D               [ 4]  346 	ld	c, l
+    0000017A 44               [ 4]  347 	ld	b, h
+                                    348 ;c:\gbdk\include\gb\gb.h:1974: itm->y=y, itm->x=x;
+    0000017B F8 01            [12]  349 	ldhl	sp,	#1
+    0000017D 2A               [ 8]  350 	ld	a, (hl+)
+    0000017E 02               [ 8]  351 	ld	(bc), a
+    0000017F 03               [ 8]  352 	inc	bc
+    00000180 7E               [ 8]  353 	ld	a, (hl)
+    00000181 02               [ 8]  354 	ld	(bc), a
+                                    355 ;main.c:73: move(&robot, robot.x, robot.y);
+    00000182                        356 00104$:
+                                    357 ;main.c:49: return ((joy & ~oldJoy) & key);
+    00000182 FAr08r00         [16]  358 	ld	a, (#_oldJoy)
+    00000185 2F               [ 4]  359 	cpl
+    00000186 21r00r00         [12]  360 	ld	hl, #_joy
+    00000189 A6               [ 8]  361 	and	a, (hl)
+    0000018A 0F               [ 4]  362 	rrca
+    0000018B D2r13r02         [16]  363 	jp	NC, 00108$
+                                    364 ;main.c:76: if (keyPressed(J_RIGHT)) {
+                                    365 ;main.c:77: if (robot.x < 7) robot.x++;
+    0000018E FAr04r00         [16]  366 	ld	a, (#(_robot + 4) + 0)
+    00000191 FE 07            [ 8]  367 	cp	a, #0x07
+    00000193 30 04            [12]  368 	jr	NC, 00106$
+    00000195 3C               [ 4]  369 	inc	a
+    00000196 EAr04r00         [16]  370 	ld	(#(_robot + 4)),a
+    00000199                        371 00106$:
+                                    372 ;main.c:78: move(&robot, robot.x, robot.y);
+    00000199 21r05r00         [12]  373 	ld	hl, #(_robot + 5)
+    0000019C 4E               [ 8]  374 	ld	c, (hl)
+    0000019D FAr04r00         [16]  375 	ld	a, (#(_robot + 4) + 0)
+                                    376 ;main.c:20: uint8_t tempX = calcPos(x);
+    000001A0 CB 37            [ 8]  377 	swap	a
+    000001A2 E6 F0            [ 8]  378 	and	a, #0xf0
+    000001A4 C6 18            [ 8]  379 	add	a, #0x18
+    000001A6 F8 02            [12]  380 	ldhl	sp,	#2
+                                    381 ;main.c:21: uint8_t tempY = calcPos(y);
+    000001A8 32               [ 8]  382 	ld	(hl-), a
+    000001A9 2B               [ 8]  383 	dec	hl
+    000001AA 79               [ 4]  384 	ld	a, c
+    000001AB CB 37            [ 8]  385 	swap	a
+    000001AD E6 F0            [ 8]  386 	and	a, #0xf0
+    000001AF C6 18            [ 8]  387 	add	a, #0x18
+    000001B1 77               [ 8]  388 	ld	(hl), a
+                                    389 ;main.c:22: move_sprite(robot->spriteids[0], tempX, tempY);
+    000001B2 21r00r00         [12]  390 	ld	hl, #_robot
+                                    391 ;c:\gbdk\include\gb\gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    000001B5 6E               [ 8]  392 	ld	l, (hl)
+    000001B6 11r00r00         [12]  393 	ld	de, #_shadow_OAM+0
+    000001B9 26 00            [ 8]  394 	ld	h, #0x00
+    000001BB 29               [ 8]  395 	add	hl, hl
+    000001BC 29               [ 8]  396 	add	hl, hl
+    000001BD 19               [ 8]  397 	add	hl, de
+    000001BE 4D               [ 4]  398 	ld	c, l
+    000001BF 44               [ 4]  399 	ld	b, h
+                                    400 ;c:\gbdk\include\gb\gb.h:1974: itm->y=y, itm->x=x;
+    000001C0 F8 00            [12]  401 	ldhl	sp,	#0
+    000001C2 2A               [ 8]  402 	ld	a, (hl+)
+    000001C3 23               [ 8]  403 	inc	hl
+    000001C4 02               [ 8]  404 	ld	(bc), a
+    000001C5 03               [ 8]  405 	inc	bc
+                                    406 ;main.c:23: move_sprite(robot->spriteids[1], tempX, tempY + PIECESIZE);
+    000001C6 3A               [ 8]  407 	ld	a, (hl-)
+    000001C7 2B               [ 8]  408 	dec	hl
+    000001C8 02               [ 8]  409 	ld	(bc), a
+    000001C9 2A               [ 8]  410 	ld	a, (hl+)
+    000001CA C6 08            [ 8]  411 	add	a, #0x08
+    000001CC 77               [ 8]  412 	ld	(hl), a
+    000001CD 4E               [ 8]  413 	ld	c, (hl)
+    000001CE 21r01r00         [12]  414 	ld	hl, #_robot + 1
+    000001D1 5E               [ 8]  415 	ld	e, (hl)
+                                    416 ;c:\gbdk\include\gb\gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    000001D2 AF               [ 4]  417 	xor	a, a
+    000001D3 6B               [ 4]  418 	ld	l, e
+    000001D4 67               [ 4]  419 	ld	h, a
+    000001D5 29               [ 8]  420 	add	hl, hl
+    000001D6 29               [ 8]  421 	add	hl, hl
+    000001D7 11r00r00         [12]  422 	ld	de, #_shadow_OAM
+    000001DA 19               [ 8]  423 	add	hl, de
+                                    424 ;c:\gbdk\include\gb\gb.h:1974: itm->y=y, itm->x=x;
+    000001DB 79               [ 4]  425 	ld	a, c
+    000001DC 22               [ 8]  426 	ld	(hl+), a
+    000001DD 4D               [ 4]  427 	ld	c, l
+    000001DE 44               [ 4]  428 	ld	b, h
+    000001DF F8 02            [12]  429 	ldhl	sp,	#2
+    000001E1 7E               [ 8]  430 	ld	a, (hl)
+    000001E2 02               [ 8]  431 	ld	(bc), a
+                                    432 ;main.c:24: move_sprite(robot->spriteids[2], tempX + PIECESIZE, tempY);
+    000001E3 7E               [ 8]  433 	ld	a, (hl)
+    000001E4 C6 08            [ 8]  434 	add	a, #0x08
+    000001E6 77               [ 8]  435 	ld	(hl), a
+    000001E7 4E               [ 8]  436 	ld	c, (hl)
+    000001E8 21r02r00         [12]  437 	ld	hl, #_robot + 2
+    000001EB 5E               [ 8]  438 	ld	e, (hl)
+                                    439 ;c:\gbdk\include\gb\gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    000001EC AF               [ 4]  440 	xor	a, a
+    000001ED 6B               [ 4]  441 	ld	l, e
+    000001EE 67               [ 4]  442 	ld	h, a
+    000001EF 29               [ 8]  443 	add	hl, hl
+    000001F0 29               [ 8]  444 	add	hl, hl
+    000001F1 11r00r00         [12]  445 	ld	de, #_shadow_OAM
+    000001F4 19               [ 8]  446 	add	hl, de
+    000001F5 5D               [ 4]  447 	ld	e, l
+    000001F6 54               [ 4]  448 	ld	d, h
+                                    449 ;c:\gbdk\include\gb\gb.h:1974: itm->y=y, itm->x=x;
+    000001F7 F8 00            [12]  450 	ldhl	sp,	#0
+    000001F9 7E               [ 8]  451 	ld	a, (hl)
+    000001FA 12               [ 8]  452 	ld	(de), a
+    000001FB 13               [ 8]  453 	inc	de
+    000001FC 79               [ 4]  454 	ld	a, c
+    000001FD 12               [ 8]  455 	ld	(de), a
+                                    456 ;main.c:25: move_sprite(robot->spriteids[3], tempX + PIECESIZE, tempY + PIECESIZE);
+    000001FE 21r03r00         [12]  457 	ld	hl, #_robot + 3
+                                    458 ;c:\gbdk\include\gb\gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    00000201 6E               [ 8]  459 	ld	l, (hl)
+    00000202 01r00r00         [12]  460 	ld	bc, #_shadow_OAM+0
+    00000205 26 00            [ 8]  461 	ld	h, #0x00
+    00000207 29               [ 8]  462 	add	hl, hl
+    00000208 29               [ 8]  463 	add	hl, hl
+    00000209 09               [ 8]  464 	add	hl, bc
+    0000020A 4D               [ 4]  465 	ld	c, l
+    0000020B 44               [ 4]  466 	ld	b, h
+                                    467 ;c:\gbdk\include\gb\gb.h:1974: itm->y=y, itm->x=x;
+    0000020C F8 01            [12]  468 	ldhl	sp,	#1
+    0000020E 2A               [ 8]  469 	ld	a, (hl+)
+    0000020F 02               [ 8]  470 	ld	(bc), a
+    00000210 03               [ 8]  471 	inc	bc
+    00000211 7E               [ 8]  472 	ld	a, (hl)
+    00000212 02               [ 8]  473 	ld	(bc), a
+                                    474 ;main.c:78: move(&robot, robot.x, robot.y);
+    00000213                        475 00108$:
+                                    476 ;main.c:49: return ((joy & ~oldJoy) & key);
+    00000213 FAr08r00         [16]  477 	ld	a, (#_oldJoy)
+    00000216 2F               [ 4]  478 	cpl
+    00000217 21r00r00         [12]  479 	ld	hl, #_joy
+    0000021A A6               [ 8]  480 	and	a, (hl)
+    0000021B CB 57            [ 8]  481 	bit	2, a
+    0000021D 28 77            [12]  482 	jr	Z, 00112$
+                                    483 ;main.c:81: if (keyPressed(J_UP)) {
+                                    484 ;main.c:82: if (robot.y != 0) robot.y--;
+    0000021F FAr05r00         [16]  485 	ld	a, (#(_robot + 5) + 0)
+    00000222 B7               [ 4]  486 	or	a, a
+    00000223 28 04            [12]  487 	jr	Z, 00110$
+    00000225 3D               [ 4]  488 	dec	a
+    00000226 EAr05r00         [16]  489 	ld	(#(_robot + 5)),a
+    00000229                        490 00110$:
+                                    491 ;main.c:83: move(&robot, robot.x, robot.y);
+    00000229 21r05r00         [12]  492 	ld	hl, #(_robot + 5)
+    0000022C 46               [ 8]  493 	ld	b, (hl)
+    0000022D FAr04r00         [16]  494 	ld	a, (#(_robot + 4) + 0)
+    00000230 21r00r00         [12]  495 	ld	hl, #_robot
+                                    496 ;main.c:20: uint8_t tempX = calcPos(x);
+    00000233 CB 37            [ 8]  497 	swap	a
+    00000235 E6 F0            [ 8]  498 	and	a, #0xf0
+    00000237 C6 18            [ 8]  499 	add	a, #0x18
+    00000239 4F               [ 4]  500 	ld	c, a
+                                    501 ;main.c:21: uint8_t tempY = calcPos(y);
+    0000023A 78               [ 4]  502 	ld	a, b
+    0000023B CB 37            [ 8]  503 	swap	a
+    0000023D E6 F0            [ 8]  504 	and	a, #0xf0
+    0000023F C6 18            [ 8]  505 	add	a, #0x18
+    00000241 47               [ 4]  506 	ld	b, a
+                                    507 ;main.c:22: move_sprite(robot->spriteids[0], tempX, tempY);
+                                    508 ;c:\gbdk\include\gb\gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    00000242 6E               [ 8]  509 	ld	l, (hl)
+    00000243 26 00            [ 8]  510 	ld	h, #0x00
+    00000245 29               [ 8]  511 	add	hl, hl
+    00000246 29               [ 8]  512 	add	hl, hl
+    00000247 11r00r00         [12]  513 	ld	de, #_shadow_OAM
+    0000024A 19               [ 8]  514 	add	hl, de
+                                    515 ;c:\gbdk\include\gb\gb.h:1974: itm->y=y, itm->x=x;
+    0000024B 78               [ 4]  516 	ld	a, b
+    0000024C 22               [ 8]  517 	ld	(hl+), a
+    0000024D 71               [ 8]  518 	ld	(hl), c
+                                    519 ;main.c:23: move_sprite(robot->spriteids[1], tempX, tempY + PIECESIZE);
+    0000024E 78               [ 4]  520 	ld	a, b
+    0000024F C6 08            [ 8]  521 	add	a, #0x08
+    00000251 F8 01            [12]  522 	ldhl	sp,	#1
+    00000253 77               [ 8]  523 	ld	(hl), a
+    00000254 2A               [ 8]  524 	ld	a, (hl+)
+    00000255 77               [ 8]  525 	ld	(hl), a
+    00000256 21r01r00         [12]  526 	ld	hl, #_robot + 1
+    00000259 5E               [ 8]  527 	ld	e, (hl)
+                                    528 ;c:\gbdk\include\gb\gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    0000025A AF               [ 4]  529 	xor	a, a
+    0000025B 6B               [ 4]  530 	ld	l, e
+    0000025C 67               [ 4]  531 	ld	h, a
+    0000025D 29               [ 8]  532 	add	hl, hl
+    0000025E 29               [ 8]  533 	add	hl, hl
+    0000025F 11r00r00         [12]  534 	ld	de, #_shadow_OAM
+    00000262 19               [ 8]  535 	add	hl, de
+    00000263 5D               [ 4]  536 	ld	e, l
+    00000264 54               [ 4]  537 	ld	d, h
+                                    538 ;c:\gbdk\include\gb\gb.h:1974: itm->y=y, itm->x=x;
+    00000265 F8 02            [12]  539 	ldhl	sp,	#2
+    00000267 7E               [ 8]  540 	ld	a, (hl)
+    00000268 12               [ 8]  541 	ld	(de), a
+    00000269 13               [ 8]  542 	inc	de
+    0000026A 79               [ 4]  543 	ld	a, c
+    0000026B 12               [ 8]  544 	ld	(de), a
+                                    545 ;main.c:24: move_sprite(robot->spriteids[2], tempX + PIECESIZE, tempY);
+    0000026C 79               [ 4]  546 	ld	a, c
+    0000026D C6 08            [ 8]  547 	add	a, #0x08
+    0000026F 77               [ 8]  548 	ld	(hl), a
+    00000270 4E               [ 8]  549 	ld	c, (hl)
+    00000271 21r02r00         [12]  550 	ld	hl, #_robot + 2
+    00000274 5E               [ 8]  551 	ld	e, (hl)
+                                    552 ;c:\gbdk\include\gb\gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    00000275 AF               [ 4]  553 	xor	a, a
+    00000276 6B               [ 4]  554 	ld	l, e
+    00000277 67               [ 4]  555 	ld	h, a
+    00000278 29               [ 8]  556 	add	hl, hl
+    00000279 29               [ 8]  557 	add	hl, hl
+    0000027A 11r00r00         [12]  558 	ld	de, #_shadow_OAM
+    0000027D 19               [ 8]  559 	add	hl, de
+                                    560 ;c:\gbdk\include\gb\gb.h:1974: itm->y=y, itm->x=x;
+    0000027E 78               [ 4]  561 	ld	a, b
+    0000027F 22               [ 8]  562 	ld	(hl+), a
+    00000280 71               [ 8]  563 	ld	(hl), c
+                                    564 ;main.c:25: move_sprite(robot->spriteids[3], tempX + PIECESIZE, tempY + PIECESIZE);
+    00000281 21r03r00         [12]  565 	ld	hl, #_robot + 3
+                                    566 ;c:\gbdk\include\gb\gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    00000284 6E               [ 8]  567 	ld	l, (hl)
+    00000285 01r00r00         [12]  568 	ld	bc, #_shadow_OAM+0
+    00000288 26 00            [ 8]  569 	ld	h, #0x00
+    0000028A 29               [ 8]  570 	add	hl, hl
+    0000028B 29               [ 8]  571 	add	hl, hl
+    0000028C 09               [ 8]  572 	add	hl, bc
+    0000028D 4D               [ 4]  573 	ld	c, l
+    0000028E 44               [ 4]  574 	ld	b, h
+                                    575 ;c:\gbdk\include\gb\gb.h:1974: itm->y=y, itm->x=x;
+    0000028F F8 01            [12]  576 	ldhl	sp,	#1
+    00000291 2A               [ 8]  577 	ld	a, (hl+)
+    00000292 02               [ 8]  578 	ld	(bc), a
+    00000293 03               [ 8]  579 	inc	bc
+    00000294 7E               [ 8]  580 	ld	a, (hl)
+    00000295 02               [ 8]  581 	ld	(bc), a
+                                    582 ;main.c:83: move(&robot, robot.x, robot.y);
+    00000296                        583 00112$:
+                                    584 ;main.c:49: return ((joy & ~oldJoy) & key);
+    00000296 FAr08r00         [16]  585 	ld	a, (#_oldJoy)
+    00000299 2F               [ 4]  586 	cpl
+    0000029A 21r00r00         [12]  587 	ld	hl, #_joy
+    0000029D A6               [ 8]  588 	and	a, (hl)
+    0000029E CB 5F            [ 8]  589 	bit	3, a
+    000002A0 CAr26r03         [16]  590 	jp	Z, 00116$
+                                    591 ;main.c:86: if (keyPressed(J_DOWN)) {
+                                    592 ;main.c:87: if (robot.y < 7) robot.y++;
+    000002A3 FAr05r00         [16]  593 	ld	a, (#(_robot + 5) + 0)
+    000002A6 FE 07            [ 8]  594 	cp	a, #0x07
+    000002A8 30 04            [12]  595 	jr	NC, 00114$
+    000002AA 3C               [ 4]  596 	inc	a
+    000002AB EAr05r00         [16]  597 	ld	(#(_robot + 5)),a
+    000002AE                        598 00114$:
+                                    599 ;main.c:88: move(&robot, robot.x, robot.y);
+    000002AE 21r05r00         [12]  600 	ld	hl, #(_robot + 5)
+    000002B1 4E               [ 8]  601 	ld	c, (hl)
+    000002B2 FAr04r00         [16]  602 	ld	a, (#(_robot + 4) + 0)
+                                    603 ;main.c:20: uint8_t tempX = calcPos(x);
+    000002B5 CB 37            [ 8]  604 	swap	a
+    000002B7 E6 F0            [ 8]  605 	and	a, #0xf0
+    000002B9 C6 18            [ 8]  606 	add	a, #0x18
+    000002BB F8 00            [12]  607 	ldhl	sp,	#0
+                                    608 ;main.c:21: uint8_t tempY = calcPos(y);
+    000002BD 22               [ 8]  609 	ld	(hl+), a
+    000002BE 79               [ 4]  610 	ld	a, c
+    000002BF CB 37            [ 8]  611 	swap	a
+    000002C1 E6 F0            [ 8]  612 	and	a, #0xf0
+    000002C3 C6 18            [ 8]  613 	add	a, #0x18
+    000002C5 77               [ 8]  614 	ld	(hl), a
+                                    615 ;main.c:22: move_sprite(robot->spriteids[0], tempX, tempY);
+    000002C6 21r00r00         [12]  616 	ld	hl, #_robot
+    000002C9 4E               [ 8]  617 	ld	c, (hl)
+                                    618 ;c:\gbdk\include\gb\gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    000002CA AF               [ 4]  619 	xor	a, a
+    000002CB 69               [ 4]  620 	ld	l, c
+    000002CC 67               [ 4]  621 	ld	h, a
+    000002CD 29               [ 8]  622 	add	hl, hl
+    000002CE 29               [ 8]  623 	add	hl, hl
+    000002CF 11r00r00         [12]  624 	ld	de, #_shadow_OAM
+    000002D2 19               [ 8]  625 	add	hl, de
+    000002D3 4D               [ 4]  626 	ld	c, l
+    000002D4 44               [ 4]  627 	ld	b, h
+                                    628 ;c:\gbdk\include\gb\gb.h:1974: itm->y=y, itm->x=x;
+    000002D5 F8 01            [12]  629 	ldhl	sp,	#1
+    000002D7 3A               [ 8]  630 	ld	a, (hl-)
+    000002D8 02               [ 8]  631 	ld	(bc), a
+    000002D9 03               [ 8]  632 	inc	bc
+                                    633 ;main.c:23: move_sprite(robot->spriteids[1], tempX, tempY + PIECESIZE);
+    000002DA 2A               [ 8]  634 	ld	a, (hl+)
+    000002DB 02               [ 8]  635 	ld	(bc), a
+    000002DC 2A               [ 8]  636 	ld	a, (hl+)
+    000002DD C6 08            [ 8]  637 	add	a, #0x08
+    000002DF 4F               [ 4]  638 	ld	c, a
+    000002E0 71               [ 8]  639 	ld	(hl), c
+    000002E1 21r01r00         [12]  640 	ld	hl, #(_robot + 1)
+    000002E4 46               [ 8]  641 	ld	b, (hl)
+                                    642 ;c:\gbdk\include\gb\gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    000002E5 11r00r00         [12]  643 	ld	de, #_shadow_OAM+0
+    000002E8 AF               [ 4]  644 	xor	a, a
+    000002E9 68               [ 4]  645 	ld	l, b
+    000002EA 67               [ 4]  646 	ld	h, a
+    000002EB 29               [ 8]  647 	add	hl, hl
+    000002EC 29               [ 8]  648 	add	hl, hl
+    000002ED 19               [ 8]  649 	add	hl, de
+    000002EE 5D               [ 4]  650 	ld	e, l
+    000002EF 54               [ 4]  651 	ld	d, h
+                                    652 ;c:\gbdk\include\gb\gb.h:1974: itm->y=y, itm->x=x;
+    000002F0 F8 02            [12]  653 	ldhl	sp,	#2
+    000002F2 3A               [ 8]  654 	ld	a, (hl-)
+    000002F3 2B               [ 8]  655 	dec	hl
+    000002F4 12               [ 8]  656 	ld	(de), a
+    000002F5 13               [ 8]  657 	inc	de
+    000002F6 7E               [ 8]  658 	ld	a, (hl)
+    000002F7 12               [ 8]  659 	ld	(de), a
+                                    660 ;main.c:24: move_sprite(robot->spriteids[2], tempX + PIECESIZE, tempY);
+    000002F8 2A               [ 8]  661 	ld	a, (hl+)
+    000002F9 23               [ 8]  662 	inc	hl
+    000002FA C6 08            [ 8]  663 	add	a, #0x08
+    000002FC 47               [ 4]  664 	ld	b, a
+    000002FD 70               [ 8]  665 	ld	(hl), b
+    000002FE 21r02r00         [12]  666 	ld	hl, #_robot + 2
+    00000301 5E               [ 8]  667 	ld	e, (hl)
+                                    668 ;c:\gbdk\include\gb\gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    00000302 AF               [ 4]  669 	xor	a, a
+    00000303 6B               [ 4]  670 	ld	l, e
+    00000304 67               [ 4]  671 	ld	h, a
+    00000305 29               [ 8]  672 	add	hl, hl
+    00000306 29               [ 8]  673 	add	hl, hl
+    00000307 7D               [ 4]  674 	ld	a, l
+    00000308 C6r00            [ 8]  675 	add	a, #<(_shadow_OAM)
+    0000030A 5F               [ 4]  676 	ld	e, a
+    0000030B 7C               [ 4]  677 	ld	a, h
+    0000030C CEs00            [ 8]  678 	adc	a, #>(_shadow_OAM)
+    0000030E 57               [ 4]  679 	ld	d, a
+                                    680 ;c:\gbdk\include\gb\gb.h:1974: itm->y=y, itm->x=x;
+    0000030F F8 01            [12]  681 	ldhl	sp,	#1
+    00000311 2A               [ 8]  682 	ld	a, (hl+)
+    00000312 12               [ 8]  683 	ld	(de), a
+    00000313 13               [ 8]  684 	inc	de
+    00000314 7E               [ 8]  685 	ld	a, (hl)
+    00000315 12               [ 8]  686 	ld	(de), a
+                                    687 ;main.c:25: move_sprite(robot->spriteids[3], tempX + PIECESIZE, tempY + PIECESIZE);
+    00000316 21r03r00         [12]  688 	ld	hl, #_robot + 3
+    00000319 5E               [ 8]  689 	ld	e, (hl)
+                                    690 ;c:\gbdk\include\gb\gb.h:1973: OAM_item_t * itm = &shadow_OAM[nb];
+    0000031A AF               [ 4]  691 	xor	a, a
+    0000031B 6B               [ 4]  692 	ld	l, e
+    0000031C 67               [ 4]  693 	ld	h, a
+    0000031D 29               [ 8]  694 	add	hl, hl
+    0000031E 29               [ 8]  695 	add	hl, hl
+    0000031F 11r00r00         [12]  696 	ld	de, #_shadow_OAM
+    00000322 19               [ 8]  697 	add	hl, de
+                                    698 ;c:\gbdk\include\gb\gb.h:1974: itm->y=y, itm->x=x;
+    00000323 79               [ 4]  699 	ld	a, c
+    00000324 22               [ 8]  700 	ld	(hl+), a
+    00000325 70               [ 8]  701 	ld	(hl), b
+                                    702 ;main.c:88: move(&robot, robot.x, robot.y);
+    00000326                        703 00116$:
+                                    704 ;main.c:93: vsync();
+    00000326 CDr00r00         [24]  705 	call	_vsync
+    00000329 C3rF3r00         [16]  706 	jp	00118$
+                                    707 ;main.c:95: }
+    0000032C E8 03            [16]  708 	add	sp, #3
+    0000032E C9               [16]  709 	ret
+                                    710 	.area _CODE
+                                    711 	.area _INITIALIZER
+    00000000                        712 __xinit__joy:
+    00000000 00                     713 	.db #0x00	; 0
+                                    714 	.area _CABS (ABS)
