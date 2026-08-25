@@ -1,6 +1,8 @@
 # Minestepper
 a GB game about navigating a robot through a perilous dungeon!
 
+![image](https://github.com/gameing-guy/Minestepper/blob/main/assets/robotGo.gif?raw=true)
+
 ### Download
 it's a three step process!
 1. download the source!
