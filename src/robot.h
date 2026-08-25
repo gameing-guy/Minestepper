@@ -1,3 +1,6 @@
+#ifndef ROBOT_H
+#define ROBOT_H
+
 #include <gb/gb.h>
 #include <stdint.h>
 
@@ -8,3 +11,5 @@ struct Robot {
     uint8_t width;
     uint8_t height;
 };
+
+#endif
